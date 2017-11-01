@@ -5,150 +5,69 @@ html {
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Lato', sans-serif;
     height: 100%;
 }
 
 #root {
     height: 100%;
+    background-color: #644749
 }
 
-body .github-fork-ribbon:before {
-    background-color: #333;
+.component-forecast .location,
+.component-forecast .current {
+    padding: 10px 15px;
 }
 
-@media screen and (max-width: 400px) {
-    .github-fork-ribbon {
-        display: none;
-    }
+.component-forecast .location {
+    background-color: #8BA892;
+    color: #D1DCD3;
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 20px
 }
 
-.component-app {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    height: 100%;
+.component-forecast .current {
+    background-color: #E3BB88;
+    color: #ffffff;
+    font-size: 16px;
+    padding-left: 60%;
+    position: relative;
 }
 
-.component-display {
-    background-color: #858694;
-    color: white;
-    text-align: right;
-    font-weight: 200;
-    flex: 0 0 auto;
-    width: 100%;
+.component-forecast .current div {
+    padding-top: 5px
 }
 
-.component-display>div {
-    font-size: 20px;
-    padding: 8px 4px 0 4px;
+.component-forecast .time {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #F4E4CF
 }
 
-@media (min-width: 200px) and (min-height: 200px) {
-    .component-display>div {
-        font-size: 60px;
-        padding: 20px 16px 0 10px;
-    }
+.component-forecast .temp {
+    font-size: 44px;
 }
 
-@media (min-width: 300px) and (min-height: 200px) {
-    .component-display>div {
-        font-size: 70px;
-        padding: 20px 22px 0 10px;
-    }
+.component-forecast .temp sup {
+    font-size: 24px
 }
 
-@media (min-width: 600px) and (min-height: 600px) {
-    .component-display>div {
-        font-size: 80px;
-        padding: 20px 30px 0 15px;
-    }
+.component-forecast .text {
+    font-size: 36px
 }
 
-@media (min-width: 800px) and (min-height: 800px) {
-    .component-display>div {
-        font-size: 100px;
-        padding: 20px 40px 0 20px;
-    }
+.component-forecast .current .wi {
+    position: absolute;
+    left: 30%;
+    top: 50%;
+    font-size: 80px;
+    margin-top: -60px;
+    margin-left: -70px;
+    color: #DB9864;
 }
 
-.component-button-panel {
-    background-color: #858694;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex: 1 0 auto;
-}
-
-.component-button-panel>div {
-    width: 100%;
-    margin-bottom: 1px;
-    flex: 1 0 auto;
-    display: flex;
-}
-
-.component-button {
-    display: inline-flex;
-    width: 25%;
-    flex: 1 0 auto;
-}
-
-.component-button.wide {
-    width: 50%;
-}
-
-.component-button button {
-    background-color: #E0E0E0;
-    border: 0;
-    font-size: 12px;
-    margin: 0 1px 0 0;
-    flex: 1 0 auto;
-    padding: 0;
-}
-
-.component-button:last-child button {
-    margin-right: 0;
-}
-
-.component-button.orange button {
-    background-color: #F5923E;
-    color: white;
-}
-
-.wide-button { width: 50% }
-
-@media (min-width: 200px) and (min-height: 200px) {
-    .component-button button {
-        font-size: 25px;
-    }
-}
-
-@media (min-width: 300px) and (min-height: 300px) {
-    .component-button button {
-        font-size: 30px;
-    }
-}
-
-@media (min-width: 400px) and (min-height: 400px) {
-    .component-button button {
-        font-size: 35px;
-    }
-}
-
-@media (min-width: 500px) and (min-height: 500px) {
-    .component-button button {
-        font-size: 40px;
-    }
-}
-
-@media (min-width: 600px) and (min-height: 600px) {
-    .component-button button {
-        font-size: 60px;
-    }
-}
-
-@media (min-width: 800px) and (min-height: 800px) {
-    .component-button button {
-        font-size: 70px;
-    }
-}
+.component-forecast .day { background-color: #DB9864 }
+.component-forecast .evening { background-color: #B1695A }
+.component-forecast .night { background-color: #644749 }
