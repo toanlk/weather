@@ -1,0 +1,22 @@
+{
+  "name": "weather",
+  "version": "1.0.0",
+  "description": "Weather App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "toanlk",
+  "license": "ISC",
+  "dependencies": {
+    "@types/react": "^16.0.19",
+    "@types/react-dom": "^16.0.2",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.3.0",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.6.1"
+  }
+}
