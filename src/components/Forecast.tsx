@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export interface ForecastProps extends React.Props<Forecast> { location: string, current: any, forecast: any }
+export interface ForecastProps extends React.Props<Forecast> { class: string, current: any, forecast: any }
 
 export class Forecast extends React.Component<ForecastProps> {
 
@@ -15,15 +15,21 @@ export class Forecast extends React.Component<ForecastProps> {
             className = Object.keys(class_map).filter(function(key) {return class_map[key] === grade})[0];
         }
 
+        console.log(text);
+
+        if(!className) className = " wi-cloud";
+
         return "wi " + className;
     }
 
     render() {
-        console.log(this.props.forecast);
+        let className = "component-forecast";
+        
+        if(!this.props.class) className = className + " hide";
+        //console.log(this.props.forecast);
         
         return (
-            <div className="component-forecast">
-                <div className="location">{this.props.location}</div>
+            <div className={className}>
                 <div className="current">
                     <i className={this.map_class(this.props.current.text)}></i>
                     <div className="time">Today</div>

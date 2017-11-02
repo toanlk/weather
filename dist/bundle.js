@@ -105,37 +105,61 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(0);
 const Forecast_1 = __webpack_require__(4);
+const Location_1 = __webpack_require__(6);
+const LocationSearch_1 = __webpack_require__(7);
+//// Class ///////////////////////////////////////////////////////////////////////////////
 class Main extends React.Component {
     constructor(props) {
         super(props);
+        this.displaySearchBox = () => {
+            console.log('Show search box');
+            this.setState({ is_search_on: true });
+        };
+        this.selectLocation = (woeid) => {
+            console.log('Change location: ' + woeid);
+            this.fetchData(woeid);
+        };
         this.state = this.getInitialState();
     }
     getInitialState() {
         return {
-            location: '',
+            location: {
+                id: 663350,
+                name: "Ilmenau"
+            },
             current: [],
             forecast: {
                 0: { temp: 7, text: "Cloudy", day: "" },
                 1: { temp: 7, text: "Cloudy", day: "" },
                 2: { temp: 7, text: "Cloudy", day: "" },
-            }
+            },
+            is_search_on: false
         };
     }
     componentDidMount() {
-        let woeid = 663350;
-        this.fetchData(woeid);
+        console.log("Main::componentDidMount() " + this.state.location);
+        this.fetchData(this.state.location.id);
     }
+    render() {
+        let searchClass = this.state.is_search_on ? "" : "hide";
+        console.log("Main::render() " + this.state.location);
+        return (React.createElement("div", { className: "component-app" },
+            React.createElement(LocationSearch_1.LocationSearch, { class: searchClass, onSelectLocation: this.selectLocation }),
+            React.createElement(Location_1.Location, { class: searchClass, location: this.state.location.name, clickHandler: this.displaySearchBox }),
+            React.createElement(Forecast_1.Forecast, { class: searchClass, current: this.state.current, forecast: this.state.forecast })));
+    }
+    //// logic ///////////////////////////////////////////////////////////////////////////////
     fetchData(woeid) {
         return __awaiter(this, void 0, void 0, function* () {
             let url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D" + woeid + "%20and%20u%3D'c'&format=json&diagnostics=true&callback=";
             try {
-                //const res = await fetch(url);
-                //const data = await res.json();
-                let data = __webpack_require__(6);
+                const res = yield fetch(url);
+                const data = yield res.json();
+                //let data = require("../storage/data.json");
                 const result = data.query.results.channel;
-                console.log(result);
-                let fLocation = result.location.city + ', ' + result.location.country;
-                console.log(fLocation);
+                //console.log(result);
+                let location_name = result.location.city + ', ' + result.location.country;
+                //console.log(location_name);
                 let current_cond = {
                     temp: result.item.condition.temp,
                     text: result.item.condition.text,
@@ -159,16 +183,20 @@ class Main extends React.Component {
                         day: result.item.forecast[3].day,
                     },
                 };
-                this.setState({ location: fLocation, current: current_cond, forecast: forecast_cond });
+                this.setState({
+                    location: {
+                        id: woeid,
+                        name: location_name
+                    },
+                    current: current_cond,
+                    forecast: forecast_cond,
+                    is_search_on: false
+                });
             }
             catch (e) {
                 console.log("Forecast::fetchData() " + e.message);
             }
         });
-    }
-    render() {
-        return (React.createElement("div", { className: 'component-app' },
-            React.createElement(Forecast_1.Forecast, { location: this.state.location, current: this.state.current, forecast: this.state.forecast })));
     }
 }
 exports.Main = Main;
@@ -190,12 +218,17 @@ class Forecast extends React.Component {
             let grade = text.toString().toLowerCase();
             className = Object.keys(class_map).filter(function (key) { return class_map[key] === grade; })[0];
         }
+        console.log(text);
+        if (!className)
+            className = " wi-cloud";
         return "wi " + className;
     }
     render() {
-        console.log(this.props.forecast);
-        return (React.createElement("div", { className: "component-forecast" },
-            React.createElement("div", { className: "location" }, this.props.location),
+        let className = "component-forecast";
+        if (!this.props.class)
+            className = className + " hide";
+        //console.log(this.props.forecast);
+        return (React.createElement("div", { className: className },
             React.createElement("div", { className: "current" },
                 React.createElement("i", { className: this.map_class(this.props.current.text) }),
                 React.createElement("div", { className: "time" }, "Today"),
@@ -239,9 +272,139 @@ module.exports = {"wi-yahoo-0":"tornado","wi-yahoo-1":"day-storm-showers","wi-ya
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = {"query":{"count":1,"created":"2017-11-01T12:12:42Z","lang":"en-US","diagnostics":{"publiclyCallable":"true","url":{"execution-start-time":"0","execution-stop-time":"4","execution-time":"4","content":"http://weather-ydn-yql.media.yahoo.com:4080/v3/public/weather/rss?u=c&w=663350"},"user-time":"4","service-time":"4","build-version":"2.0.203"},"results":{"channel":{"units":{"distance":"km","pressure":"mb","speed":"km/h","temperature":"C"},"title":"Yahoo! Weather - Ilmenau, TH, DE","link":"http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-663350/","description":"Yahoo! Weather for Ilmenau, TH, DE","language":"en-us","lastBuildDate":"Wed, 01 Nov 2017 01:12 PM CET","ttl":"60","location":{"city":"Ilmenau","country":"Germany","region":" TH"},"wind":{"chill":"41","direction":"230","speed":"22.53"},"atmosphere":{"humidity":"91","pressure":"32306.16","rising":"0","visibility":"23.82"},"astronomy":{"sunrise":"7:9 am","sunset":"4:50 pm"},"image":{"title":"Yahoo! Weather","width":"142","height":"18","link":"http://weather.yahoo.com","url":"http://l.yimg.com/a/i/brand/purplelogo//uh/us/news-wea.gif"},"item":{"title":"Conditions for Ilmenau, TH, DE at 12:00 PM CET","lat":"50.6838","long":"10.91973","link":"http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-663350/","pubDate":"Wed, 01 Nov 2017 12:00 PM CET","condition":{"code":"26","date":"Wed, 01 Nov 2017 12:00 PM CET","temp":"7","text":"Cloudy"},"forecast":[{"code":"12","date":"01 Nov 2017","day":"Wed","high":"7","low":"3","text":"Rain"},{"code":"28","date":"02 Nov 2017","day":"Thu","high":"10","low":"5","text":"Mostly Cloudy"},{"code":"28","date":"03 Nov 2017","day":"Fri","high":"7","low":"3","text":"Mostly Cloudy"},{"code":"28","date":"04 Nov 2017","day":"Sat","high":"10","low":"4","text":"Mostly Cloudy"},{"code":"39","date":"05 Nov 2017","day":"Sun","high":"8","low":"5","text":"Scattered Showers"},{"code":"28","date":"06 Nov 2017","day":"Mon","high":"6","low":"3","text":"Mostly Cloudy"},{"code":"30","date":"07 Nov 2017","day":"Tue","high":"5","low":"2","text":"Partly Cloudy"},{"code":"30","date":"08 Nov 2017","day":"Wed","high":"6","low":"2","text":"Partly Cloudy"},{"code":"28","date":"09 Nov 2017","day":"Thu","high":"5","low":"2","text":"Mostly Cloudy"},{"code":"28","date":"10 Nov 2017","day":"Fri","high":"8","low":"3","text":"Mostly Cloudy"}],"description":"<![CDATA[<img src=\"http://l.yimg.com/a/i/us/we/52/26.gif\"/>\n<BR />\n<b>Current Conditions:</b>\n<BR />Cloudy\n<BR />\n<BR />\n<b>Forecast:</b>\n<BR /> Wed - Rain. High: 7Low: 3\n<BR /> Thu - Mostly Cloudy. High: 10Low: 5\n<BR /> Fri - Mostly Cloudy. High: 7Low: 3\n<BR /> Sat - Mostly Cloudy. High: 10Low: 4\n<BR /> Sun - Scattered Showers. High: 8Low: 5\n<BR />\n<BR />\n<a href=\"http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-663350/\">Full Forecast at Yahoo! Weather</a>\n<BR />\n<BR />\n<BR />\n]]>","guid":{"isPermaLink":"false"}}}}}}
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(0);
+class Location extends React.Component {
+    handleClick() {
+        this.props.clickHandler();
+    }
+    render() {
+        let className = "component-location";
+        if (!this.props.class)
+            className = className + " hide";
+        console.log("Location::render() " + this.props.location);
+        return (React.createElement("div", { className: className },
+            React.createElement("i", { className: "fa fa-map-marker" }),
+            this.props.location,
+            React.createElement("i", { className: "fa fa-bars", onClick: () => this.handleClick() })));
+    }
+}
+exports.Location = Location;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(0);
+class LocationSearch extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = this.getInitialState();
+    }
+    getInitialState() {
+        return { userInput: '', locations: [] };
+    }
+    componentDidMount() {
+        //console.log("LocationSearch::componentDidMount() " + this.state.userInput);
+        if (this.state.userInput) {
+            console.log("LocationSearch::componentDidMount() update location");
+            this.searchLocation(this.state.userInput);
+        }
+    }
+    handleKeyPress(e) {
+        if (e.key == "Enter") {
+            event.preventDefault();
+            event.stopPropagation();
+            //console.log("LocationSearch::handleKeyPress() " + e.target.value);
+            if (e.target.value)
+                this.searchLocation(e.target.value);
+        }
+    }
+    handleClick(woeid) {
+        if (woeid) {
+            console.log(woeid);
+            this.props.onSelectLocation(woeid);
+        }
+    }
+    render() {
+        let className = "component-location-search";
+        if (this.props.class)
+            className = className + " " + this.props.class;
+        return (React.createElement("div", { className: className },
+            React.createElement("div", { className: "box-search" },
+                React.createElement("input", { type: "text", onKeyDown: this.handleKeyPress.bind(this), placeholder: "Search your place", className: "txt-location", tabIndex: 0, autoFocus: true }),
+                React.createElement("i", { className: "fa fa-search" })),
+            React.createElement("div", { className: "lst-location" }, this.state.locations.map(location => React.createElement("div", { key: location.woeid, className: "item", onClick: () => this.handleClick(location.woeid) },
+                React.createElement("i", { className: "fa fa-map-marker" }),
+                React.createElement("div", { className: "title" }, location.name),
+                React.createElement("div", { className: "description" }, location.country))))));
+    }
+    //// logic ///////////////////////////////////////////////////////////////////////////////
+    searchLocation(location) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("LocationSearch::searchLocation() " + location);
+            try {
+                const url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.places%20where%20text%3D%22' + location + '%22&format=json&diagnostics=true&callback=';
+                const res = yield fetch(url);
+                const data = yield res.json();
+                const results = data.query.results.place;
+                console.log(results);
+                if (results && Array.isArray(results)) {
+                    let locations = mapToLocations(results);
+                    if (locations) {
+                        // remove duplicate items
+                        locations = locations.filter((obj, pos, arr) => {
+                            return arr.map(mapObj => mapObj['woeid']).indexOf(obj['woeid']) === pos && obj['woeid'] != 0;
+                        });
+                        this.setState({ userInput: location, locations: locations });
+                    }
+                }
+                else {
+                    this.setState(this.getInitialState());
+                }
+            }
+            catch (e) {
+                console.log("Forecast::fetchData() " + e.message);
+                this.setState(this.getInitialState());
+            }
+        });
+    }
+}
+exports.LocationSearch = LocationSearch;
+const mapToLocations = (arr) => {
+    return arr.map(mapToLocation);
+};
+const mapToLocation = (loc) => {
+    if (loc.locality1 && loc.locality1.woeid) {
+        return {
+            woeid: loc.locality1.woeid,
+            name: loc.locality1.content,
+            country: loc.country.content
+        };
+    }
+    return {
+        woeid: 0,
+        name: "",
+        country: ""
+    };
+};
+
 
 /***/ })
 /******/ ]);

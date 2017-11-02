@@ -1,9 +1,15 @@
 import * as React from 'react';
 
 import { Forecast } from "./Forecast";
+import { Location } from "./Location";
+import { LocationSearch } from "./LocationSearch";
 
-export interface MainState { location: string, current: any, forecast: any }
+//// Props and States /////////////////////////////////////////////////////////////////////
+
+export interface MainState { location: any, current: any, forecast: any, is_search_on: boolean }
 export interface MainProps extends React.Props<Main> { }
+
+//// Class ///////////////////////////////////////////////////////////////////////////////
 
 export class Main extends React.Component<MainProps, MainState> {
 
@@ -14,35 +20,66 @@ export class Main extends React.Component<MainProps, MainState> {
 
     getInitialState(): MainState {
         return {
-            location: '',
+            location: {
+                id: 663350,
+                name: "Ilmenau"
+            },
             current: [],
             forecast: {
-                0: {temp: 7, text: "Cloudy", day: ""},
-                1: {temp: 7, text: "Cloudy", day: ""},
-                2: {temp: 7, text: "Cloudy", day: ""},
-            }
+                0: { temp: 7, text: "Cloudy", day: "" },
+                1: { temp: 7, text: "Cloudy", day: "" },
+                2: { temp: 7, text: "Cloudy", day: "" },
+            },
+            is_search_on: false
         }
     }
 
     componentDidMount() {
-        let woeid = 663350;
+        console.log("Main::componentDidMount() " + this.state.location);
+        this.fetchData(this.state.location.id);
+    }
+
+    displaySearchBox = () => {
+        console.log('Show search box');
+        this.setState({ is_search_on: true });
+    }
+
+    selectLocation = (woeid: number) => {
+        console.log('Change location: ' + woeid);
         this.fetchData(woeid);
     }
 
-    async fetchData(woeid: number) {
-        let url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D" + woeid + "%20and%20u%3D'c'&format=json&diagnostics=true&callback=";
-        
-        try {
-            //const res = await fetch(url);
-            //const data = await res.json();
+    render() {
+        let searchClass = this.state.is_search_on ? "" : "hide";
 
-            let data = require("../storage/data.json");
+        console.log("Main::render() " + this.state.location);
+
+        return (
+            <div className="component-app">
+                <LocationSearch class={searchClass} onSelectLocation={this.selectLocation} />
+                <Location class={searchClass} location={this.state.location.name} clickHandler={this.displaySearchBox} />
+                <Forecast class={searchClass} current={this.state.current} forecast={this.state.forecast} />
+            </div>
+        );
+    }
+
+    //// logic ///////////////////////////////////////////////////////////////////////////////
+
+    async fetchData(woeid: number) {
+
+        let url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D" + woeid + "%20and%20u%3D'c'&format=json&diagnostics=true&callback=";
+
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+
+            //let data = require("../storage/data.json");
 
             const result = data.query.results.channel;
-            console.log(result);
+            //console.log(result);
 
-            let fLocation = result.location.city + ', ' + result.location.country;
-            console.log(fLocation);
+            let location_name = result.location.city + ', ' + result.location.country;
+            //console.log(location_name);
 
             let current_cond = {
                 temp: result.item.condition.temp,
@@ -52,34 +89,34 @@ export class Main extends React.Component<MainProps, MainState> {
             }
 
             let forecast_cond = {
-                0: { 
+                0: {
                     temp: result.item.forecast[1].low,
                     text: result.item.forecast[1].text,
                     day: result.item.forecast[1].day,
                 },
-                1: { 
+                1: {
                     temp: result.item.forecast[2].low,
                     text: result.item.forecast[2].text,
                     day: result.item.forecast[2].day,
                 },
-                2: { 
+                2: {
                     temp: result.item.forecast[3].low,
                     text: result.item.forecast[3].text,
                     day: result.item.forecast[3].day,
                 },
             }
 
-            this.setState({ location: fLocation, current: current_cond, forecast: forecast_cond });
+            this.setState({
+                location: {
+                    id: woeid,
+                    name: location_name
+                },
+                current: current_cond,
+                forecast: forecast_cond,
+                is_search_on: false
+            });
         } catch (e) {
             console.log("Forecast::fetchData() " + e.message);
         }
-    }
-
-    render() {
-        return (
-            <div className='component-app'>
-                <Forecast location={this.state.location} current={this.state.current} forecast={this.state.forecast}/>
-            </div>
-        );
     }
 }

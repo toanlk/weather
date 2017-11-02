@@ -14,20 +14,33 @@ body {
     background-color: #644749
 }
 
-.component-forecast .location,
-.component-forecast .current {
-    padding: 10px 15px;
+.component-app {
+    height: 100%
 }
 
-.component-forecast .location {
+.component-location {
     background-color: #8BA892;
     color: #D1DCD3;
     font-size: 18px;
-    font-weight: bold;
-    padding-top: 20px
+    padding: 15px 15px 10px;
+    position: relative
+}
+
+.component-location .fa {
+    font-size: 28px;
+    padding-right: 5px
+}
+
+.component-location .fa-bars {
+    font-size: 16px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -8px
 }
 
 .component-forecast .current {
+    padding: 10px 15px;
     background-color: #E3BB88;
     color: #ffffff;
     font-size: 16px;
@@ -36,7 +49,7 @@ body {
 }
 
 .component-forecast .current div {
-    padding-top: 5px
+    padding-top: 4px
 }
 
 .component-forecast .time {
@@ -47,7 +60,7 @@ body {
 }
 
 .component-forecast .temp {
-    font-size: 44px;
+    font-size: 40px;
 }
 
 .component-forecast .temp sup {
@@ -55,7 +68,7 @@ body {
 }
 
 .component-forecast .text {
-    font-size: 36px
+    font-size: 28px
 }
 
 .component-forecast .current .wi {
@@ -68,6 +81,95 @@ body {
     color: #DB9864;
 }
 
-.component-forecast .day { background-color: #DB9864 }
-.component-forecast .evening { background-color: #B1695A }
-.component-forecast .night { background-color: #644749 }
+.component-forecast .day {
+    background-color: #DB9864
+}
+
+.component-forecast .evening {
+    background-color: #B1695A
+}
+
+.component-forecast .night {
+    background-color: #644749
+}
+
+.component-location-search {
+    height: 100%;
+    background-color: #E5EBF7;
+    padding: 0;
+}
+
+.box-search {
+    width: 100%;
+    position: relative;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: #ffffff
+}
+
+.txt-location {
+    border: 0;
+    background: none;
+    font-size: 16px;
+    color: #9BC7FF;
+    background-color: #EEF5FF;
+    border-radius: 20px;
+    margin: 0;
+    padding: 10px 10px 10px 40px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.txt-location::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: #9BC7FF;
+}
+
+.txt-location:focus {
+    outline: none;
+}
+
+.component-location-search .fa-search {
+    color: #9BC7FF;
+    font-size: 16px;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    padding: 10px;
+}
+
+.lst-location {
+    padding: 15px
+}
+
+.lst-location .item {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    position: relative;
+    padding-left: 60px
+}
+
+.lst-location .item .fa {
+    color: #FB4C6D;
+    font-size: 36px;
+    position: absolute;
+    left: 20px;
+    top: 10px
+}
+
+.lst-location .item .title {
+    font-size: 20px;
+    color: #333333
+}
+
+.lst-location .item .description {
+    font-size: 14px;
+    color: #666666;
+    padding-top: 5px
+}
+
+.hide { display: none }
