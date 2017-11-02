@@ -2,7 +2,12 @@ import * as React from 'react';
 
 export interface LocationEntity { woeid: number, name: string, country: string }
 export interface LocationSearchState { userInput: string, locations: Array<LocationEntity> }
-export interface LocationSearchProps extends React.Props<LocationSearch> { class: string, onSelectLocation: (id: number) => void }
+export interface LocationSearchProps extends React.Props<LocationSearch> {
+    class: string,
+    onSelectLocation: (id: number) => void,
+    hideSearchBox: () => void,
+
+}
 
 export class LocationSearch extends React.Component<LocationSearchProps, LocationSearchState> {
 
@@ -42,6 +47,10 @@ export class LocationSearch extends React.Component<LocationSearchProps, Locatio
         }
     }
 
+    hideSearchBox() {
+        this.props.hideSearchBox();
+    }
+
     render() {
         let className = "component-location-search";
 
@@ -63,6 +72,7 @@ export class LocationSearch extends React.Component<LocationSearchProps, Locatio
                         </div>
                     )}
                 </div>
+                <button className="btnCancel" onClick={() => this.hideSearchBox()}>Cancel</button>
             </div>
         );
     }

@@ -44,6 +44,11 @@ export class Main extends React.Component<MainProps, MainState> {
         this.setState({ is_search_on: true });
     }
 
+    hideSearchBox = () => {
+        console.log('Hide search box');
+        this.setState({ is_search_on: false });
+    }
+
     selectLocation = (woeid: number) => {
         console.log('Change location: ' + woeid);
         this.fetchData(woeid);
@@ -56,7 +61,7 @@ export class Main extends React.Component<MainProps, MainState> {
 
         return (
             <div className="component-app">
-                <LocationSearch class={searchClass} onSelectLocation={this.selectLocation} />
+                <LocationSearch class={searchClass} onSelectLocation={this.selectLocation} hideSearchBox={this.hideSearchBox} />
                 <Location class={searchClass} location={this.state.location.name} clickHandler={this.displaySearchBox} />
                 <Forecast class={searchClass} current={this.state.current} forecast={this.state.forecast} />
             </div>

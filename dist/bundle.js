@@ -115,6 +115,10 @@ class Main extends React.Component {
             console.log('Show search box');
             this.setState({ is_search_on: true });
         };
+        this.hideSearchBox = () => {
+            console.log('Hide search box');
+            this.setState({ is_search_on: false });
+        };
         this.selectLocation = (woeid) => {
             console.log('Change location: ' + woeid);
             this.fetchData(woeid);
@@ -144,7 +148,7 @@ class Main extends React.Component {
         let searchClass = this.state.is_search_on ? "" : "hide";
         console.log("Main::render() " + this.state.location);
         return (React.createElement("div", { className: "component-app" },
-            React.createElement(LocationSearch_1.LocationSearch, { class: searchClass, onSelectLocation: this.selectLocation }),
+            React.createElement(LocationSearch_1.LocationSearch, { class: searchClass, onSelectLocation: this.selectLocation, hideSearchBox: this.hideSearchBox }),
             React.createElement(Location_1.Location, { class: searchClass, location: this.state.location.name, clickHandler: this.displaySearchBox }),
             React.createElement(Forecast_1.Forecast, { class: searchClass, current: this.state.current, forecast: this.state.forecast })));
     }
@@ -342,6 +346,9 @@ class LocationSearch extends React.Component {
             this.props.onSelectLocation(woeid);
         }
     }
+    hideSearchBox() {
+        this.props.hideSearchBox();
+    }
     render() {
         let className = "component-location-search";
         if (this.props.class)
@@ -353,7 +360,8 @@ class LocationSearch extends React.Component {
             React.createElement("div", { className: "lst-location" }, this.state.locations.map(location => React.createElement("div", { key: location.woeid, className: "item", onClick: () => this.handleClick(location.woeid) },
                 React.createElement("i", { className: "fa fa-map-marker" }),
                 React.createElement("div", { className: "title" }, location.name),
-                React.createElement("div", { className: "description" }, location.country))))));
+                React.createElement("div", { className: "description" }, location.country)))),
+            React.createElement("button", { className: "btnCancel", onClick: () => this.hideSearchBox() }, "Cancel")));
     }
     //// logic ///////////////////////////////////////////////////////////////////////////////
     searchLocation(location) {
