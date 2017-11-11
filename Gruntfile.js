@@ -46,7 +46,7 @@ module.exports = function (grunt) {
                         fontDestination: "./src/styles/fonts/lato"
                     }
                 },
-    
+
                 source_sans_pro: {
                     options: {
                         family: "Source Sans Pro",
@@ -55,6 +55,17 @@ module.exports = function (grunt) {
                         ],
                         cssDestination: "./src/styles/fonts/source_sans_pro",
                         fontDestination: "./src/styles/fonts/source_sans_pro"
+                    }
+                },
+
+                quicksand: {
+                    options: {
+                        family: "Quicksand",
+                        sizes: [
+                            400,500
+                        ],
+                        cssDestination: "./src/styles/fonts/quicksand",
+                        fontDestination: "./src/styles/fonts/quicksand"
                     }
                 }
             }
